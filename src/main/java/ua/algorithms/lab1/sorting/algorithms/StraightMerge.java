@@ -1,0 +1,150 @@
+package ua.algorithms.lab1.sorting.algorithms;
+
+import ua.algorithms.lab1.util.MutableInt;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+import static ua.algorithms.lab1.util.MutableInt.*;
+
+public class StraightMerge extends ExternalMergeSortingAlgorithm {
+
+    private RandomAccessFile buff1;
+    private RandomAccessFile buff2;
+    private RandomAccessFile source;
+
+    public StraightMerge(String dest1, String dest2) {
+        super(dest1, dest2);
+    }
+
+    @Override
+    public void sort(File source) {
+        try {
+            initialize(source);
+            int groupNumber = 0, digitsInGroup = 1;
+            while (groupNumber != 2) {
+                groupNumber = separate(digitsInGroup);
+                buff1.seek(0);
+                buff2.seek(0);
+                this.source.setLength(0);
+                merge(digitsInGroup, groupNumber);
+                this.source.seek(0);
+                buff1.setLength(0);
+                buff2.setLength(0);
+                digitsInGroup *= 2;
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void merge(int digitsInGroup, int groupNumber) throws IOException {
+        int counter = 0;
+        while ((groupNumber / 2) > counter) {
+            MutableInt pBuff1 = defaultValue(), pBuff2 = defaultValue(),
+                       read1 = of(readNextInt(buff1)), read2 = of(readNextInt(buff2));
+            while (pBuff1.getValue().compareTo(digitsInGroup) < 0 && pBuff2.getValue().compareTo(digitsInGroup) < 0) {
+                if (read1.compareTo(read2) > 0)
+                    writeCurrentAndReadNext(source, buff2, read2, pBuff2, digitsInGroup);
+                else
+                    writeCurrentAndReadNext(source, buff1, read1, pBuff1, digitsInGroup);
+            }
+            if (pBuff1.getValue().equals(digitsInGroup))
+                while (pBuff2.getValue().compareTo(digitsInGroup) < 0)
+                    writeCurrentAndReadNext(source, buff2, read2, pBuff2, digitsInGroup);
+            else
+                while (pBuff1.getValue().compareTo(digitsInGroup) < 0)
+                    writeCurrentAndReadNext(source, buff1, read1, pBuff1, digitsInGroup);
+            counter++;
+        }
+    }
+
+    private void writeCurrentAndReadNext(RandomAccessFile dest,
+                                         RandomAccessFile src,
+                                         MutableInt curr,
+                                         MutableInt ptr,
+                                         Integer digitsInGroup) throws IOException {
+        writeIntAppendSpace(dest, curr.getValue());
+        ptr.increment();
+        if (!ptr.getValue().equals(digitsInGroup))
+            curr.setValue(readNextInt(src));
+    }
+
+    private int readNextInt(RandomAccessFile source) throws IOException {
+        StringBuilder buff = new StringBuilder();
+        readDigitToBuff(source, buff);
+        return Integer.parseInt(buff.toString());
+    }
+
+    private void initialize(File source) {
+        try {
+            this.buff1 = new RandomAccessFile(super.getDest1(), "rw");
+            this.buff1.setLength(0);
+            this.buff2 = new RandomAccessFile(super.getDest2(), "rw");
+            this.buff2.setLength(0);
+            this.source = new RandomAccessFile(source, "rw");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private int separate(int digitsNumberInGroup) throws IOException {
+        boolean eof = false;
+        int groupCounter = 0;
+        while (!eof) {
+            eof = separateGroup(digitsNumberInGroup, groupCounter);
+            groupCounter++;
+        }
+        return groupCounter;
+    }
+
+    private boolean separateGroup(int digitsNumberInGroup, int groupCounter) throws IOException {
+        boolean eof = false;
+        for (int k = 0; k < digitsNumberInGroup && !eof; k++) {
+            StringBuilder buff = new StringBuilder();
+            eof = readDigitToBuff(source, buff);
+            if (groupCounter % 2 == 0) {
+                writeStringAppendSpace(buff1, buff);
+            } else {
+                writeStringAppendSpace(buff2, buff);
+            }
+        }
+        return eof;
+    }
+
+    private static boolean readDigitToBuff(RandomAccessFile source, StringBuilder buff) throws IOException {
+        boolean eof = false;
+        int ch;
+        while ((ch = source.read()) != 32) {
+            if (ch == -1) {
+                eof = true;
+                break;
+            }
+            buff.append((char) ch);
+        }
+        return eof;
+    }
+
+    private void writeStringAppendSpace(RandomAccessFile dest, StringBuilder buff) throws IOException {
+        if (dest.length() != 0)
+            buff.insert(0, ' ');
+        dest.write(buff.toString().getBytes());
+    }
+
+    private void writeIntAppendSpace(RandomAccessFile dest, Integer i) throws IOException {
+        writeStringAppendSpace(dest, new StringBuilder(String.valueOf(i)));
+    }
+
+    @Override
+    public void close() throws IOException {
+        buff1.close();
+        buff2.close();
+        source.close();
+    }
+}
