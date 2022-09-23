@@ -2,10 +2,7 @@ package ua.algorithms.lab1.sorting.algorithms;
 
 import ua.algorithms.lab1.util.MutableInt;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 import static ua.algorithms.lab1.util.MutableInt.*;
 
@@ -68,16 +65,16 @@ public class StraightMerge extends ExternalMergeSortingAlgorithm {
                                          MutableInt curr,
                                          MutableInt ptr,
                                          Integer digitsInGroup) throws IOException {
-        writeIntAppendSpace(dest, curr.getValue());
+        writeInt(dest, curr.getValue());
         ptr.increment();
         if (!ptr.getValue().equals(digitsInGroup))
             curr.setValue(readNextInt(src));
     }
 
     private int readNextInt(RandomAccessFile source) throws IOException {
-        StringBuilder buff = new StringBuilder();
+        MutableInt buff = MutableInt.defaultValue();
         readDigitToBuff(source, buff);
-        return Integer.parseInt(buff.toString());
+        return buff.getValue();
     }
 
     private void initialize(File source) {
@@ -107,38 +104,29 @@ public class StraightMerge extends ExternalMergeSortingAlgorithm {
     private boolean separateGroup(int digitsNumberInGroup, int groupCounter) throws IOException {
         boolean eof = false;
         for (int k = 0; k < digitsNumberInGroup && !eof; k++) {
-            StringBuilder buff = new StringBuilder();
+            MutableInt buff = MutableInt.defaultValue();
             eof = readDigitToBuff(source, buff);
             if (groupCounter % 2 == 0) {
-                writeStringAppendSpace(buff1, buff);
+                writeInt(buff1, buff.getValue());
             } else {
-                writeStringAppendSpace(buff2, buff);
+                writeInt(buff2, buff.getValue());
             }
         }
         return eof;
     }
 
-    private static boolean readDigitToBuff(RandomAccessFile source, StringBuilder buff) throws IOException {
+    private static boolean readDigitToBuff(RandomAccessFile source, MutableInt buff) throws IOException {
         boolean eof = false;
-        int ch;
-        while ((ch = source.read()) != 32) {
-            if (ch == -1) {
-                eof = true;
-                break;
-            }
-            buff.append((char) ch);
+        try {
+            buff.setValue(source.readInt());
+        } catch (EOFException e) {
+            eof = true;
         }
         return eof;
     }
 
-    private void writeStringAppendSpace(RandomAccessFile dest, StringBuilder buff) throws IOException {
-        if (dest.length() != 0)
-            buff.insert(0, ' ');
-        dest.write(buff.toString().getBytes());
-    }
-
-    private void writeIntAppendSpace(RandomAccessFile dest, Integer i) throws IOException {
-        writeStringAppendSpace(dest, new StringBuilder(String.valueOf(i)));
+    private void writeInt(RandomAccessFile dest, Integer i) throws IOException {
+        dest.writeInt(i);
     }
 
     @Override
