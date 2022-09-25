@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6642fe15-3ad3-4f34-916f-9b5cc1f70500" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMergeOfBinary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableLong.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/C.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMerge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableInt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/A.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/B.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/A.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/C.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/B.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/configuration.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/configuration.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,7 +47,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/test/temp.bin",
+    "last_opened_file_path": "D:/KPI/Algorithms/Labs/lab-1/src/main/resources/B.bin",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2",

@@ -3,6 +3,7 @@ package ua.algorithms.lab1.util;
 import java.util.Objects;
 
 public class MutableInt implements Comparable<MutableInt> {
+
     private Integer value;
 
     private MutableInt() {
@@ -29,10 +30,6 @@ public class MutableInt implements Comparable<MutableInt> {
         this.value = value;
     }
 
-    public void increment() {
-        value++;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,6 +45,7 @@ public class MutableInt implements Comparable<MutableInt> {
 
     @Override
     public int compareTo(MutableInt o) {
-        return Integer.compare(this.getValue().compareTo(o.getValue()), 0);
+        return Long.compare(this.getValue().compareTo(o.getValue()), 0);
     }
+
 }
