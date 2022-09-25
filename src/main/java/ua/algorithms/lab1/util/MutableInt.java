@@ -48,4 +48,8 @@ public class MutableInt implements Comparable<MutableInt> {
         return Long.compare(this.getValue().compareTo(o.getValue()), 0);
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

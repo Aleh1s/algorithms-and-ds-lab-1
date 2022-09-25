@@ -50,4 +50,9 @@ public class MutableLong implements Comparable<MutableLong> {
     public int compareTo(MutableLong o) {
         return Long.compare(this.getValue().compareTo(o.getValue()), 0L);
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }
