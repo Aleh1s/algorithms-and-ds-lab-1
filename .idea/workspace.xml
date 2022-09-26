@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6642fe15-3ad3-4f34-916f-9b5cc1f70500" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/LogUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/MethodNotImplementedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ExternalStraightMergeSortingAlgorithm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ImprovedStraightMerge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMergeOfBinary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMergeOfBinary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableInt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableLong.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableLong.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/FileSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/FileSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ExternalMergeSortingAlgorithm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ImprovedStraightSorting.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMerge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMergeOfBinary.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/configuration.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/configuration.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +47,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/KPI/Algorithms/Labs/lab-1/src/main/resources/B.bin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Programming/streams-pipelines&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -51,6 +56,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="ua.algorithms.lab1" />
+      <recent name="ua.algorithms.lab1.exception" />
       <recent name="ua.algorithms.lab1.observer" />
     </key>
   </component>
