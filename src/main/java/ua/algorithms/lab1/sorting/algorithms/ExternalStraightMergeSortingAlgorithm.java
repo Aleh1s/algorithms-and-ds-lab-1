@@ -11,6 +11,7 @@ public abstract class ExternalStraightMergeSortingAlgorithm {
 
     protected static final File buff1;
     protected static final File buff2;
+    protected static final File output;
 
     public static void sort(File source) {
         // Has no default implementation
@@ -20,5 +21,6 @@ public abstract class ExternalStraightMergeSortingAlgorithm {
         Properties properties = Property.getInstance().getProperties();
         buff1 = new File(properties.getProperty("default.path.buff1"));
         buff2 = new File(properties.getProperty("default.path.buff2"));
+        output = new File(properties.getProperty("default.path.output"));
     }
 }
