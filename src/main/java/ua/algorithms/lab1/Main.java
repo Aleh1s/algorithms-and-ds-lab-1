@@ -6,6 +6,7 @@ import ua.algorithms.lab1.sorting.algorithms.ImprovedStraightMerge;
 import ua.algorithms.lab1.sorting.algorithms.StraightMerge;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -19,16 +20,11 @@ public class Main {
         String sourcePath = properties.getProperty("default.path.source");
         String outputPath = properties.getProperty("default.path.output");
         int chunkSize = 104_857_600;
-        int numberOfChunks = 3;
+        int numberOfChunks = 160;
         try (RandomAccessFile raf = new RandomAccessFile(sourcePath, "rw")) {
             raf.setLength(0);
             for (int i = 0; i < numberOfChunks; i++) {
-                int[] random;
-                if (i != 2) {
-                    random = new int[chunkSize / Integer.BYTES];
-                } else {
-                    random = new int[(chunkSize / 2) / Integer.BYTES];
-                }
+                int[] random = new int[chunkSize / Integer.BYTES];
                 for (int j = 0; j < random.length; j++) {
                     random[j] = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
                 }
@@ -40,19 +36,14 @@ public class Main {
         long start = System.nanoTime();
         ImprovedStraightMerge.sort(new File(sourcePath));
         long finish = System.nanoTime();
-        System.out.println(TimeUnit.NANOSECONDS.toMinutes(finish - start));
+        System.out.println("Sorting took " + TimeUnit.NANOSECONDS.toMinutes(finish - start) + " minutes");
 
         try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
             boolean passed = true;
             int previous = 0;
             int curr = 0;
             for (int i = 0; i < numberOfChunks; i++) {
-                byte[] chunk;
-                if (i != 2) {
-                    chunk = new byte[chunkSize];
-                } else {
-                    chunk = new byte[chunkSize / 2];
-                }
+                byte[] chunk = new byte[chunkSize];
                 raf.read(chunk, 0, chunk.length);
                 int[] from = ImprovedStraightMerge.from(chunk);
                 previous = from[0];
@@ -71,5 +62,16 @@ public class Main {
             }
             System.out.println(passed ? "Passed" : String.format("Not passed, prev - %d, curr - %d", previous, curr));
         }
+
+//        System.out.println(Arrays.toString(ByteBuffer.allocate(4).putInt(1932776890).array()));
+
+//        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "r")) {
+//            try {
+//                while (true)
+//                    System.out.println(raf.readInt());
+//            } catch (EOFException e) {
+//
+//            }
+//        }
     }
 }

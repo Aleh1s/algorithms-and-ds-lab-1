@@ -9,19 +9,19 @@ import java.io.RandomAccessFile;
 import java.util.*;
 
 public class ImprovedStraightMerge extends ExternalStraightMergeSortingAlgorithm {
-
-    private static RandomAccessFile buff1Access;
-    private static RandomAccessFile buff2Access;
     private static RandomAccessFile outputAccess;
     private static RandomAccessFile sourceAccess;
     private static Map<Integer, File> indexFileMap;
     private static Map<Integer, RandomAccessFile> indexFileAccessMap;
+    private static byte[] buff;
+    private static int buffPointer;
     private static final String CHUNKS_PATH;
 
     static {
         CHUNKS_PATH = Property.getInstance().getProperties().getProperty("default.path.chunks");
     }
 
+    private static int chunksPartSize;
     private static final int CHUNK_BYTE_SIZE = 104_857_600;
 
     private static void initialize(File source) {
@@ -29,6 +29,8 @@ public class ImprovedStraightMerge extends ExternalStraightMergeSortingAlgorithm
             ExternalStraightMergeSortingAlgorithm.output.createNewFile();
             outputAccess = new RandomAccessFile(ExternalStraightMergeSortingAlgorithm.output, "rw");
             sourceAccess = new RandomAccessFile(source, "r");
+            chunksPartSize = ((int) (CHUNK_BYTE_SIZE / (Math.ceil(source.length() / (double) CHUNK_BYTE_SIZE) + 1)) / Integer.BYTES) * Integer.BYTES ;
+            buff = new byte[chunksPartSize];
             indexFileMap = new HashMap<>();
             indexFileAccessMap = new HashMap<>();
         } catch (FileNotFoundException e) {
@@ -43,6 +45,7 @@ public class ImprovedStraightMerge extends ExternalStraightMergeSortingAlgorithm
             initialize(source);
             sortChunks();
             merge();
+            flush();
             close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,67 +53,105 @@ public class ImprovedStraightMerge extends ExternalStraightMergeSortingAlgorithm
     }
 
     private static void merge() throws IOException {
-        int length = (int) (sourceAccess.length() / Integer.BYTES);
-        int[] pointers = new int[indexFileMap.size()];
-        Integer[] values = getFirstValuesFromEveryChunk();
-        for (int i = 0; i < length; i++) {
-            int minValuesIndex = findIndexOfMin(values);
-            Integer minValue = values[minValuesIndex];
-            writeInt(outputAccess, minValue);
-            pointers[minValuesIndex]++;
-            RandomAccessFile raf = indexFileAccessMap.get(minValuesIndex);
-            if ((raf.length() / Integer.BYTES) > pointers[minValuesIndex]) {
-                values[minValuesIndex] = readInt(raf);
-            } else {
-                values[minValuesIndex] = null;
+        long length = sourceAccess.length() / Integer.BYTES;
+        int[] localPointers = new int[indexFileMap.size()];
+        long[] globalPointers = new long[indexFileMap.size()];
+        Integer[][] values = initializeArr();
+        for (long i = 0; i < length; i++) {
+            int minValuesIndex = findIndexOfMin(values, localPointers);
+            Integer minValue = values[minValuesIndex][localPointers[minValuesIndex]];
+            if (buffPointer >= buff.length) {
+                flush();
+                if ((length * Integer.BYTES - i * Integer.BYTES) > chunksPartSize) {
+                    buff = new byte[chunksPartSize];
+                } else {
+                    buff = new byte[(int) (length * Integer.BYTES - i * Integer.BYTES)];
+                }
+            }
+            addToBuff(minValue);
+            localPointers[minValuesIndex]++;
+            globalPointers[minValuesIndex]++;
+            if (localPointers[minValuesIndex] >= values[minValuesIndex].length) {
+                RandomAccessFile raf = indexFileAccessMap.get(minValuesIndex);
+                if (globalPointers[minValuesIndex] < (raf.length() / Integer.BYTES)) {
+                    values[minValuesIndex] = readPartOfChunk(raf, globalPointers[minValuesIndex]);
+                    localPointers[minValuesIndex] = 0;
+                } else {
+                    values[minValuesIndex] = null;
+                }
             }
         }
     }
 
-    private static int findIndexOfMin(Integer[] values) {
+    private static void flush() throws IOException {
+        outputAccess.write(buff);
+        buffPointer = 0;
+    }
+
+    private static void addToBuff(int value) {
+        buff[buffPointer++] = (byte) (value >> 24);
+        buff[buffPointer++] = (byte) (value >> 16);
+        buff[buffPointer++] = (byte) (value >> 8);
+        buff[buffPointer++] = (byte) value;
+    }
+
+
+
+    private static int findIndexOfMin(Integer[][] values, int[] pointers) {
         int index = 0;
         while (values[index] == null) index++;
-        Integer minValue = values[index];
+        Integer minValue = values[index][pointers[index]];
         for (int i = index + 1; i < values.length; i++) {
-            if (values[i] != null && minValue.compareTo(values[i]) > 0) {
-                minValue = values[i];
+            if (values[i] != null && minValue.compareTo(values[i][pointers[i]]) > 0) {
+                minValue = values[i][pointers[i]];
                 index = i;
             }
         }
         return index;
     }
 
-    private static Integer[] getFirstValuesFromEveryChunk() throws IOException {
+    private static Integer[][] initializeArr() throws IOException {
         int length = indexFileMap.size();
-        Integer[] values = new Integer[length];
+        Integer[][] values = new Integer[length][];
         for (int i = 0; i < length; i++) {
             RandomAccessFile raf = indexFileAccessMap.get(i);
-            values[i] = readInt(raf);
+            values[i] = readPartOfChunk(raf, 0);
         }
         return values;
     }
 
-    private static int readInt(RandomAccessFile raf) throws IOException {
-        byte[] buff = new byte[Integer.BYTES];
+    private static Integer[] readPartOfChunk(RandomAccessFile raf, long prt) throws IOException {
+        byte[] buff;
+        if (((raf.length() / Integer.BYTES) - prt) > chunksPartSize / Integer.BYTES) {
+            buff = new byte[chunksPartSize];
+        } else {
+            buff = new byte[(int) (((raf.length() / Integer.BYTES) - prt) * Integer.BYTES)];
+        }
         raf.read(buff);
-        return from(buff)[0];
+        return fromRef(buff);
     }
 
-    private static void writeInt(RandomAccessFile raf, int value) throws IOException {
-        byte[] buff = new byte[]{
-                (byte) (value >> 24),
-                (byte) (value >> 16),
-                (byte) (value >> 8),
-                (byte) value
-        };
-        raf.write(buff);
-    }
-
-//    private static long chunksLength() throws IOException {
-//        long sum = 0L;
-//        for (RandomAccessFile raf : indexFileAccessMap.values()) sum += raf.length();
-//        return sum;
+//    private static int readInt(RandomAccessFile raf) throws IOException {
+//        byte[] buff = new byte[Integer.BYTES];
+//        raf.read(buff);
+//        return from(buff)[0];
 //    }
+//
+//    private static void writeInt(RandomAccessFile raf, int value) throws IOException {
+//        byte[] buff = new byte[]{
+//                (byte) (value >> 24),
+//                (byte) (value >> 16),
+//                (byte) (value >> 8),
+//                (byte) value
+//        };
+//        raf.write(buff);
+//    }
+//
+////    private static long chunksLength() throws IOException {
+////        long sum = 0L;
+////        for (RandomAccessFile raf : indexFileAccessMap.values()) sum += raf.length();
+////        return sum;
+////    }
 
     public static void sortChunks() throws IOException {
         long length = sourceAccess.length();
@@ -198,15 +239,26 @@ public class ImprovedStraightMerge extends ExternalStraightMergeSortingAlgorithm
         return ints;
     }
 
-    public static byte[] from(int[] chuck) {
-        byte[] bytes = new byte[chuck.length * 4];
-        for (int i = 0; i < chuck.length; i++) {
-            bytes[i * 4] = (byte) (chuck[i] >> 24);
-            bytes[i * 4 + 1] = (byte) (chuck[i] >> 16);
-            bytes[i * 4 + 2] = (byte) (chuck[i] >> 8);
-            bytes[i * 4 + 3] = (byte) chuck[i];
+    public static byte[] from(int[] chunk) {
+        byte[] bytes = new byte[chunk.length * 4];
+        for (int i = 0; i < chunk.length; i++) {
+            bytes[i * 4] = (byte) (chunk[i] >> 24);
+            bytes[i * 4 + 1] = (byte) (chunk[i] >> 16);
+            bytes[i * 4 + 2] = (byte) (chunk[i] >> 8);
+            bytes[i * 4 + 3] = (byte) chunk[i];
         }
         return bytes;
+    }
+
+    public static Integer[] fromRef(byte[] chunk) {
+        Integer[] ints = new Integer[chunk.length / 4];
+        for (int i = 0; i < chunk.length; i += 4) {
+            ints[i / 4] = chunk[i] << 24
+                    | (chunk[i + 1] & 0xFF) << 16
+                    | (chunk[i + 2] & 0xFF) << 8
+                    | (chunk[i + 3] & 0xFF);
+        }
+        return ints;
     }
 
     public static void close() throws IOException {
