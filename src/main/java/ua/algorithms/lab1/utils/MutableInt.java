@@ -1,4 +1,4 @@
-package ua.algorithms.lab1.util;
+package ua.algorithms.lab1.utils;
 
 import java.util.Objects;
 

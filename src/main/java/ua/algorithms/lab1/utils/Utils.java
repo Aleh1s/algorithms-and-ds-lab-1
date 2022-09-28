@@ -1,4 +1,4 @@
-package ua.algorithms.lab1;
+package ua.algorithms.lab1.utils;
 
 public class Utils {
 

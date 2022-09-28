@@ -5,6 +5,7 @@ import ua.algorithms.lab1.exception.FetchFileLengthException;
 import ua.algorithms.lab1.exception.FileAccessException;
 import ua.algorithms.lab1.mvc.model.ImprovedStraightMerge;
 import ua.algorithms.lab1.mvc.model.Model;
+import ua.algorithms.lab1.mvc.model.StraightMerge;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +17,8 @@ public class ControllerImpl implements Controller {
         Model model;
         try {
             if (choice.equals("1")) {
-
+                model = StraightMerge.getInstance(source);
+                model.sort();
             } else if (choice.equals("2")) {
                 model = ImprovedStraightMerge.getInstance(source);
                 model.sort();

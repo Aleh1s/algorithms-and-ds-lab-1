@@ -5,15 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6642fe15-3ad3-4f34-916f-9b5cc1f70500" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/controller/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/controller/ControllerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/ConsoleView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/CopyFileException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/FileSystem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/CloseConnectionException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/CloseConnectionException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/FetchFileLengthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/FetchFileLengthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/FileCreateException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/FileCreateException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/MethodNotImplementedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/ReadFromFileException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/ReadFromFileException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/WriteToFileException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/exception/WriteToFileException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/controller/ControllerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/controller/ControllerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/ImprovedStraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/ImprovedStraightMerge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/Model.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/ConsoleView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/ConsoleView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/View.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ImprovedStraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/ImprovedStraightMerge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/observer/Observable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/observer/Observer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/ExternalStraightMergeSortingAlgorithm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/sorting/algorithms/StraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/StraightMerge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/LogUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/utils/MutableInt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/util/MutableLong.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/utils/MutableLong.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/A.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/B.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/configuration.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/configuration.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +83,7 @@
       <module name="lab-1" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ua.algorithms.lab1.*" />
+          <option name="PATTERN" value="ua.algorithms.lab1.utils.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

@@ -3,8 +3,6 @@ package ua.algorithms.lab1.exception;
 import java.io.IOException;
 
 public class CloseConnectionException extends IOException {
-    public CloseConnectionException() {
-    }
 
     public CloseConnectionException(String message) {
         super(message);

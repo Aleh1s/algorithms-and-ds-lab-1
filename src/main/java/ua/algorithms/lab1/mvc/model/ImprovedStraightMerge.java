@@ -3,10 +3,16 @@ package ua.algorithms.lab1.mvc.model;
 import ua.algorithms.lab1.exception.*;
 import ua.algorithms.lab1.property.Property;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import static ua.algorithms.lab1.Utils.*;
+import static ua.algorithms.lab1.utils.Utils.*;
 
 public class ImprovedStraightMerge implements Model {
     private final RandomAccessFile outputAccess;
@@ -17,17 +23,17 @@ public class ImprovedStraightMerge implements Model {
     private byte[] buff;
     private int buffPointer;
     private final int chunksPartSize;
-    private String sourcePath;
     private final Map<Integer, File> indexChunkMap;
     private final Map<Integer, RandomAccessFile> indexChunkAccessMap;
     private static final String CHUNKS_PATH;
     private static final String OUTPUT_PATH;
-    private static final int CHUNK_BYTE_SIZE = 104_857_600;
+    private static final int CHUNK_BYTE_SIZE;
 
     static {
         Properties properties = Property.getInstance().getProperties();
         CHUNKS_PATH = properties.getProperty("default.path.chunks");
         OUTPUT_PATH = properties.getProperty("default.path.output");
+        CHUNK_BYTE_SIZE = Integer.parseInt(properties.getProperty("default.chunk.size"));
     }
 
     private ImprovedStraightMerge(
@@ -50,7 +56,7 @@ public class ImprovedStraightMerge implements Model {
     }
 
     public static ImprovedStraightMerge getInstance(File source)
-            throws FileNotFoundException, FetchFileLengthException {
+            throws FileNotFoundException, FileAccessException {
         long sourceLength;
         RandomAccessFile sourceAccess, outputAccess;
         File output = new File(OUTPUT_PATH);
@@ -64,6 +70,11 @@ public class ImprovedStraightMerge implements Model {
         }
         try {
             outputAccess = new RandomAccessFile(output, "rw");
+            try {
+                outputAccess.setLength(0);
+            } catch (IOException e) {
+                throw new FileAccessException(String.format("%s (Failed to set length)", OUTPUT_PATH), e);
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Output file doesn't exist, it'll be created");
             try {
@@ -82,10 +93,19 @@ public class ImprovedStraightMerge implements Model {
             throws FileNotFoundException,
             CloseConnectionException,
             FileAccessException {
+        if (sourceLength / Integer.BYTES <= 1)
+            return;
         try {
-            sortChunks();
-            merge();
-            flush();
+            long start = System.nanoTime();
+            if (sourceLength <= CHUNK_BYTE_SIZE) {
+                sortSmallData();
+            } else {
+                sortChunks();
+                merge();
+                flush();
+            }
+            long finish = System.nanoTime();
+            System.out.printf("Sorting took %d seconds\n", TimeUnit.NANOSECONDS.toSeconds(finish - start));
             close();
         } catch (FileAccessException e) {
             closeWithTryCatch();
@@ -98,7 +118,24 @@ public class ImprovedStraightMerge implements Model {
         }
     }
 
-    public void closeWithTryCatch() throws CloseConnectionException {
+    private void sortSmallData() throws ReadFromFileException, WriteToFileException {
+        byte[] bytes = new byte[(int) sourceLength];
+        try {
+            sourceAccess.read(bytes);
+        } catch (IOException e) {
+            throw new ReadFromFileException(String.format("%s (Failed while reading)", source.getPath()), e);
+        }
+        int[] ints = from(bytes);
+        quickSort(ints, 0, ints.length - 1);
+        byte[] sorted = from(ints);
+        try {
+            outputAccess.write(sorted);
+        } catch (IOException e) {
+            throw new WriteToFileException(String.format("%s (Failed while writing)", output.getPath()), e);
+        }
+    }
+
+    private void closeWithTryCatch() throws CloseConnectionException {
         try {
             close();
         } catch (IOException e) {

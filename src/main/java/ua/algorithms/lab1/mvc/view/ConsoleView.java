@@ -19,23 +19,13 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public String getSourceFilePath() {
-        System.out.print("Write source's path or -1 if you want to exit: ");
-        Scanner input = new Scanner(System.in);
-        return input.nextLine();
-    }
-
-    @Override
-    public boolean openSourceFile(String path) {
-        return false;
-    }
-
-    @Override
     public boolean sortSourceFile(String sourcePath, String choice) {
         File source = new File(sourcePath);
         try {
             System.out.println("Sorting...");
-            return controller.sortSourceFile(source, choice);
+            boolean sorted = controller.sortSourceFile(source, choice);
+            System.out.println("Completed");
+            return sorted;
         } catch (IOException e) {
             handleException(e);
             return false;
