@@ -1,7 +1,5 @@
 package ua.algorithms.lab1.sorting.algorithms;
 
-import ua.algorithms.lab1.exception.CanNotCreateDestinationFileException;
-import ua.algorithms.lab1.exception.MethodNotImplementedException;
 import ua.algorithms.lab1.property.Property;
 
 import java.io.*;
