@@ -34,13 +34,13 @@ public class Main {
             if (length > CHUNK_SIZE / Integer.BYTES) {
                 while (bytesToWrite > 0) {
                     int[] random = new int[CHUNK_SIZE / Integer.BYTES];
-                    fillRandom(random);
+                    Utils.fillRandom(random);
                     writeInts(random, raf);
                     bytesToWrite -= CHUNK_SIZE;
                 }
             } else {
                 int[] random = new int[(int) length];
-                fillRandom(random);
+                Utils.fillRandom(random);
                 writeInts(random, raf);
             }
             System.out.println("Completed");
@@ -100,12 +100,6 @@ public class Main {
         }
     }
 
-    private static void fillRandom(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
-        }
-    }
-
     private static void writeInts(int[] arr, RandomAccessFile raf) throws IOException {
         byte[] from = Utils.from(arr);
         raf.write(from);
@@ -124,7 +118,7 @@ public class Main {
                 long toRead = length;
                 while (toRead > 0) {
                     byte[] bytes = new byte[CHUNK_SIZE];
-                    passed = testHelper(raf, bytes);
+                    passed = Utils.testHelper(raf, bytes);
                     if (!passed) {
                         break;
                     }
@@ -132,26 +126,9 @@ public class Main {
                 }
             } else {
                 byte[] bytes = new byte[(int) length];
-                passed = testHelper(raf, bytes);
+                passed = Utils.testHelper(raf, bytes);
             }
             System.out.println(passed ? "Passed" : "Failed");
         }
-    }
-
-    private static boolean testHelper(RandomAccessFile raf, byte[] bytes) throws IOException {
-        boolean passed = true;
-        raf.read(bytes);
-        int[] from = Utils.from(bytes);
-        int previous = from[0];
-        for (int i = 0; i < from.length; i++) {
-            int curr = from[i];
-            if (previous <= curr) {
-                previous = curr;
-            } else {
-                passed = false;
-                break;
-            }
-        }
-        return passed;
     }
 }

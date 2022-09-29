@@ -16,7 +16,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class StraightMerge implements Model {
-
     private final RandomAccessFile buff1Access;
     private final RandomAccessFile buff2Access;
     private final RandomAccessFile outputAccess;

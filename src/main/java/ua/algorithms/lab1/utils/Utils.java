@@ -1,5 +1,9 @@
 package ua.algorithms.lab1.utils;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Utils {
 
     public static byte[] from(int[] chunk) {
@@ -11,6 +15,29 @@ public class Utils {
             bytes[i * 4 + 3] = (byte) chunk[i];
         }
         return bytes;
+    }
+
+    public static void fillRandom(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = ThreadLocalRandom.current().nextInt(0, 10);
+        }
+    }
+
+    public static boolean testHelper(RandomAccessFile raf, byte[] bytes) throws IOException {
+        boolean passed = true;
+        raf.read(bytes);
+        int[] from = Utils.from(bytes);
+        int previous = from[0];
+        for (int i = 0; i < from.length; i++) {
+            int curr = from[i];
+            if (previous <= curr) {
+                previous = curr;
+            } else {
+                passed = false;
+                break;
+            }
+        }
+        return passed;
     }
 
     public static int[] from(byte[] chunk) {
