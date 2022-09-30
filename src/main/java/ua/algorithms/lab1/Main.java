@@ -7,9 +7,9 @@ import ua.algorithms.lab1.property.Property;
 import ua.algorithms.lab1.utils.Utils;
 
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
@@ -25,8 +25,52 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.print("Write length of file to generate data (measured in ints): ");
-        int length = new Scanner(System.in).nextInt();
+        boolean retry = true;
+        int length = 0;
+        while (retry) {
+            System.out.print("Write length of file to generate data (measured in ints) or negative value to exit: ");
+            try {
+                length = new Scanner(System.in).nextInt();
+                retry = false;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input value");
+            }
+        }
+        if (length > 0) {
+            generateSrcFile(length);
+            boolean exit = false;
+            View view = new ConsoleView(new ControllerImpl());
+            while (!exit) {
+                boolean isChoiceCorrect = false;
+                while (!isChoiceCorrect) {
+                    System.out.println("Choose sorting algorithm: \n1. Straight merge\n2. Improved straight merge");
+                    String choice = new Scanner(System.in).nextLine();
+                    int ch;
+                    try {
+                        ch = Integer.parseInt(choice);
+                        if (ch >= 1 && ch <= 2) {
+                            isChoiceCorrect = true;
+                            view.sortSourceFile(SOURCE_PATH, choice);
+                            test(OUTPUT_PATH);
+                        } else {
+                            System.err.println("Bad choice! Try again.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Input value must be digit! Try again.");
+                    } catch (IOException e) {
+                        System.err.println("Exception while testing");
+                        System.exit(0);
+                    }
+                }
+                System.out.print("Write 1 to continue or -1 to exit: ");
+                if (new Scanner(System.in).nextLine().equals("-1")) {
+                    exit = true;
+                }
+            }
+        }
+    }
+
+    private static void generateSrcFile(int length) {
         long bytesToWrite = (long) length * Integer.BYTES;
         try (RandomAccessFile raf = new RandomAccessFile(SOURCE_PATH, "rw")) {
             raf.setLength(0);
@@ -50,54 +94,6 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Exception while generating data");
         }
-
-        boolean exit = false;
-        View view = new ConsoleView(new ControllerImpl());
-        while (!exit) {
-            boolean isChoiceCorrect = false;
-            while (!isChoiceCorrect) {
-                System.out.println("Choose sorting algorithm: \n1. Straight merge\n2. Improved straight merge");
-                String choice = new Scanner(System.in).nextLine();
-                int ch;
-                try {
-                    ch = Integer.parseInt(choice);
-                    if (ch >= 1 && ch <= 2) {
-                        isChoiceCorrect = true;
-                        view.sortSourceFile(SOURCE_PATH, choice);
-                        test(OUTPUT_PATH);
-                    } else {
-                        System.err.println("Bad choice! Try again.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("Input value must be digit! Try again.");
-                } catch (IOException e) {
-                    System.err.println("Exception while testing");
-                    System.exit(0);
-                }
-            }
-            System.out.print("Write 1 to continue or -1 to exit: ");
-            if (new Scanner(System.in).nextLine().equals("-1")) {
-                exit = true;
-            }
-        }
-        try {
-            showSortedInts();
-        } catch (IOException e) {
-            // ignore
-        }
-    }
-
-    private static void showSortedInts() throws IOException {
-        final int num = 10;
-        try (RandomAccessFile raf = new RandomAccessFile(OUTPUT_PATH, "r")) {
-            for (int i = 0; i < num; i++) {
-                System.out.printf("%d ", raf.readInt());
-            }
-            raf.seek(raf.length() - (num * Integer.BYTES));
-            for (int i = 0; i < num; i++) {
-                System.out.printf("%d ", raf.readInt());
-            }
-        }
     }
 
     private static void writeInts(int[] arr, RandomAccessFile raf) throws IOException {
@@ -107,13 +103,13 @@ public class Main {
 
     private static void test(String path) throws IOException {
         System.out.println("Testing...");
+        boolean passed = true;
         try (RandomAccessFile raf = new RandomAccessFile(path, "rw")) {
             long length = raf.length();
             if (length / Integer.BYTES <= 1) {
                 System.out.println("Passed");
                 return;
             }
-            boolean passed = true;
             if (length > CHUNK_SIZE) {
                 long toRead = length;
                 while (toRead > 0) {
@@ -128,7 +124,11 @@ public class Main {
                 byte[] bytes = new byte[(int) length];
                 passed = Utils.testHelper(raf, bytes);
             }
-            System.out.println(passed ? "Passed" : "Failed");
+            if (passed) {
+                System.out.println("Passed");
+            } else {
+                System.err.println("Failed");
+            }
         }
     }
 }

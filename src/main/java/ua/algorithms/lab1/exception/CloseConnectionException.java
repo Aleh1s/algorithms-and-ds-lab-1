@@ -4,10 +4,6 @@ import java.io.IOException;
 
 public class CloseConnectionException extends IOException {
 
-    public CloseConnectionException(String message) {
-        super(message);
-    }
-
     public CloseConnectionException(String message, Throwable cause) {
         super(message, cause);
     }

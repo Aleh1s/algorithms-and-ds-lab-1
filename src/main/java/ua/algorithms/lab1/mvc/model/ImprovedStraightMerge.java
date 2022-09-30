@@ -93,8 +93,10 @@ public class ImprovedStraightMerge implements Model {
             throws FileNotFoundException,
             CloseConnectionException,
             FileAccessException {
-        if (sourceLength / Integer.BYTES <= 1)
+        if (sourceLength / Integer.BYTES <= 1) {
+            System.out.println("The data is already sorted");
             return;
+        }
         try {
             long start = System.nanoTime();
             if (sourceLength <= CHUNK_BYTE_SIZE) {
