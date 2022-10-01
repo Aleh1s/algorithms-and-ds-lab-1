@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6642fe15-3ad3-4f34-916f-9b5cc1f70500" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/ImprovedStraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/ImprovedStraightMerge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/RemakeStraightMerge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/model/RemakeStraightMerge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/lab1/mvc/view/View.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +86,9 @@
       <workItem from="1664434691043" duration="1514000" />
       <workItem from="1664459542165" duration="1917000" />
       <workItem from="1664464870436" duration="17612000" />
-      <workItem from="1664524127363" duration="9975000" />
+      <workItem from="1664524127363" duration="10203000" />
+      <workItem from="1664550983867" duration="5606000" />
+      <workItem from="1664606115850" duration="9219000" />
     </task>
     <servers />
   </component>
